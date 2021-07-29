@@ -32,6 +32,29 @@ const characters = [
 	},
 ];
 
+const Arrow = ({arrowPosition, arrowDown, svgData}) => {
+	const ref = useRef(null);
+	useEffect(() => {
+	  console.log('got ref current', ref.current);
+	}, [ref.current]);
+	// console.log('render', arrowPosition);
+	const characterWidth = typeof window !== 'undefined' ?
+	  (window.innerWidth - 50*2 - (characters.length - 1)*30)/characters.length + 30
+	:
+	  0;
+	return (
+    <div
+		  className={styles.arrow}
+      style={{
+				left: `${characterWidth * arrowPosition - 32}px`,
+				transform: arrowDown ? `scale(0.8)` : null,
+			}}
+		  dangerouslySetInnerHTML={{__html: svgData}}
+			ref={ref}
+		>
+		</div>
+  );
+};
 export default function Home() {
   const state = useState();
 	
