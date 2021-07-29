@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import Head from 'next/head'
+import * as THREE from '../three.module.js';
 // import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
