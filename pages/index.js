@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import Head from 'next/head'
 import * as THREE from '../three.module.js';
 // import Image from 'next/image'
