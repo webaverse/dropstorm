@@ -32,6 +32,72 @@ const characters = [
 	},
 ];
 
+const colors = [
+  // [
+    0xcd782e,
+    0xe5fec0,
+  // ],
+  // [
+    0xc44d31,
+    0xfffe83,
+  // ],
+  // [
+    0xab2b44,
+    0xfffe60,
+  // ],
+  // [
+    0x912552,
+    0xffed4c,
+  // ],
+  // [
+    0x66217a,
+    0xffa146,
+  // ],
+  // [
+    0x532b8b,
+    0xff7559,
+  // ],
+  // [
+    0x2a3dab,
+    0xff4a7d,
+  // ],
+  // [
+    0x1755bb,
+    0xf830a5,
+  // ],
+  // [
+    0x0076c4,
+    0xa93dec,
+  // ],
+  // [
+    0x009fb4,
+    0x5d67fa,
+  // ],
+  // [
+    0x0dafad,
+    0x457ffc,
+  // ],
+  // [
+    0x49bf85,
+    0x00c0fc,
+  // ],
+  // [
+    0x69c776,
+    0x00e8fc,
+  // ],
+  // [
+    0x9bbe58,
+    0x22fffe,
+  // ],
+  // [
+    0xafad42,
+    0x55fffc ,
+  // ],
+  // [
+    0xc38b34,
+    0xb5ffef,
+  // ],
+];
 const Arrow = ({arrowPosition, arrowDown, svgData}) => {
 	const ref = useRef(null);
 	useEffect(() => {
