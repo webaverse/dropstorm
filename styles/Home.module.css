@@ -198,6 +198,10 @@
 	background: #FFF;
 }
 
+.characters .character {
+  transition: transform 0.3s cubic-bezier(0, 1, 0, 1);
+}
+
 .characters .character .inner,
 .characters .character .inner .background
 {
@@ -208,6 +212,10 @@
   /* border-image: linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%) 10%; */
   border-color: #FFF;
 	z-index: 1;
+}
+
+.characters .character.active {
+  transform: scale3d(0.9, 0.9, 0.9);
 }
 
 .arrow {
