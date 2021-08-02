@@ -212,6 +212,7 @@ export default function Home() {
 	const ref = useRef(null);
   const [arrowPosition, _setArrowPosition] = useState(0);
   const [arrowDown, _setArrowDown] = useState(false);
+  // const [mouse, setMouse] = useState([0, 0]);
 	const [svgData, setSvgData] = useState('');
 	const [countdown, setCountdown] = useState(startCountdown);
 	const [characterPositions, setCharacterPositions] = useState(null);
@@ -336,12 +337,18 @@ export default function Home() {
 		};
 	}, []);
 	
-	// console.log('got button ref', arrowRef);
-	
-	const countdownTime = _formatCountdown(countdown);
-	
+  /* const _handleContainerMouseMove = e => {
+		setMouse([
+		  (e.clientX - window.innerWidth/2) / (window.innerWidth/2),
+		  (e.clientY - window.innerHeight/2) / (window.innerHeight/2),
+	  ]);
+	}; */
+
 	return (
-    <div className={styles.container}>
+    <div
+		  className={styles.container}
+		  // onMouseMove={_handleContainerMouseMove}
+		>
 		  <audio id="beep" style={{
 				position: 'absolute',
 				visibility: 'hidden',
@@ -367,7 +374,9 @@ export default function Home() {
         <source src="audio/song.mp3" type="audio/mp3" />
 		  </audio>
 			
-			<video loop autoPlay muted className={styles.background}>
+			<video loop autoPlay muted className={styles.background} style={{
+			  // transform: `scale3d(1.1, 1.1, 1.1) translate3d(${-mouse[0]*50}px, ${-mouse[1]*50}px, 0)`,
+			}}>
 			  <source src="videos/city.mp4" type="video/mp4" />
 			</video>
 
@@ -388,7 +397,7 @@ export default function Home() {
 				
         {/* <img src="images/dropstorm-01.svg" className={styles.biglogo} /> */}
 				
-				<div className={styles.countdown}>Starts in {countdownTime}</div>
+				<div className={styles.countdown}>Starts in {_formatCountdown(countdown)}</div>
 				
 				<div className={styles.heading}>&gt; Avatar select</div>
 				<div className={styles.characterselect}>
