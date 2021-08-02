@@ -115,6 +115,8 @@
 }
 
 .characters .wrap {
+	display: flex;
+	flex-direction: column;
 	margin-left: -10px;
   margin-bottom: 20px;
 }
