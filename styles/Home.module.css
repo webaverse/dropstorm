@@ -30,6 +30,7 @@
 	/* background-image: url('../public/filter.jfif'); */
   width: 100vw;
   min-height: 100vh;
+	perspective: 1000px;
 	overflow: hidden;
 }
 
@@ -45,6 +46,7 @@
 	/* filter: blur(10px); */
 	object-fit: cover;
 	object-position: center;
+	image-rendering: pixelated;
 }
 
 .container .inner {
