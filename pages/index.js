@@ -4,6 +4,13 @@ import * as THREE from '../three.module.js';
 // import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
+const localColor = new THREE.Color();
+const localColor2 = new THREE.Color();
+const localColor3 = new THREE.Color();
+const localColor4 = new THREE.Color();
+const localColor5 = new THREE.Color();
+const localColor6 = new THREE.Color();
+
 const characters = [
 	{
 		name: 'Scillia',
@@ -98,43 +105,325 @@ const colors = [
     0xb5ffef,
   // ],
 ];
-const Arrow = ({arrowPosition, arrowDown, svgData}) => {
-	const ref = useRef(null);
-	useEffect(() => {
+const Arrow = ({arrowPosition, arrowDown, svgData, characterPositions}) => {
+	// const ref = useRef(null);
+	const [svgDataBaked, setSvgDataBaked] = useState('');
+
+	/* useEffect(() => {
 	  console.log('got ref current', ref.current);
-	}, [ref.current]);
-	// console.log('render', arrowPosition);
-	const characterWidth = typeof window !== 'undefined' ?
-	  (window.innerWidth - 50*2 - (characters.length - 1)*30)/characters.length + 30
-	:
-	  0;
-	return (
-    <div
-		  className={styles.arrow}
-      style={{
-				left: `${characterWidth * arrowPosition - 32}px`,
-				transform: arrowDown ? `scale(0.8)` : null,
-			}}
-		  dangerouslySetInnerHTML={{__html: svgData}}
-			ref={ref}
-		>
-		</div>
-  );
+	}, [ref.current]); */
+
+	useEffect(() => {
+		if (svgData) {
+			const domParser = new DOMParser();
+			const doc = domParser.parseFromString(svgData, 'image/svg+xml');
+			const gradient = doc.querySelector('linearGradient');
+			const stops = Array.from(gradient.querySelectorAll('stop'));
+			// console.log('got doc', stops);
+			const xmlSerializer = new XMLSerializer();
+			
+			const arrowTime = 5000;
+			const startTime = Date.now();
+			let frame;
+			const _recurse = () => {
+				frame = setTimeout(() => {
+					const now = Date.now();
+					const fStart = ((now - startTime) % arrowTime) / arrowTime * colors.length;
+					const fMid = (fStart + 0.5) % colors.length;
+					const fEnd = (fStart + 1) % colors.length;
+					const startColorIndex1 = Math.floor(fStart);
+					const startColorIndex2 = Math.floor((fStart + 1) % colors.length);
+					const startColorOffset = fStart - startColorIndex1;
+					const midColorIndex1 = Math.floor(fMid);
+					const midColorIndex2 = Math.floor((fMid + 1) % colors.length);
+					const midColorOffset = fMid - midColorIndex1;
+					const endColorIndex1 = Math.floor(fEnd);
+					const endColorIndex2 = Math.floor((fEnd + 1) % colors.length);
+					const endColorOffset = fEnd - endColorIndex1;
+					
+					localColor.setHex(colors[startColorIndex1]);
+					localColor2.setHex(colors[startColorIndex2]);
+					localColor3.setHex(colors[midColorIndex1]);
+					localColor4.setHex(colors[midColorIndex2]);
+					localColor5.setHex(colors[endColorIndex1]);
+					localColor6.setHex(colors[endColorIndex2]);
+					
+					const doc2 = doc.cloneNode(true);
+					// const linearGradient = doc2.querySelector('linearGradient');
+					// window.linearGradient = linearGradient;
+					const stops = Array.from(doc2.querySelectorAll('stop'));
+					/* window.colors = [
+					  localColor,
+					  localColor2,
+					  localColor3,
+					  localColor4,
+					  localColor5,
+					  localColor6,
+						startColorIndex1,
+						startColorIndex2,
+					]; */
+					
+					// window.offset = [startColorOffset, midColorOffset, endColorOffset];
+					
+					stops[0].style.stopColor = localColor.lerp(localColor2, startColorOffset).getStyle();
+					stops[1].style.stopColor = localColor3.lerp(localColor4, midColorOffset).getStyle();
+					stops[2].style.stopColor = localColor5.lerp(localColor6,endColorOffset).getStyle();
+					
+					const s = xmlSerializer.serializeToString(doc2);
+					setSvgDataBaked(s);
+
+				  _recurse();
+					// console.log('set');
+				}, 50);
+		  };
+			_recurse();
+			return () => {
+			  clearTimeout(frame);
+			};
+		}
+	}, [svgData]);
+
+  if (characterPositions) {
+		return (
+			<div
+				className={styles.arrow}
+				style={{
+					marginTop: '-30px',
+					left: `${characterPositions[arrowPosition].x - 64}px`,
+					transform: arrowDown ? `scale(0.8)` : null,
+				}}
+				dangerouslySetInnerHTML={{__html: svgDataBaked}}
+				// ref={ref}
+			>
+			</div>
+		);
+  } else {
+	  return null;
+	}
 };
+const _formatCountdown = countdown => {
+	let seconds = Math.floor(countdown/1000);
+	const minutes = Math.floor(seconds/60);
+  seconds -= minutes *60;
+	return minutes + ':' + (seconds + '').padStart(2, '0');
+};
+const startCountdown = 10 * 60 * 1000;
 export default function Home() {
-  const state = useState();
+	const ref = useRef(null);
+  const [arrowPosition, _setArrowPosition] = useState(0);
+  const [arrowDown, _setArrowDown] = useState(false);
+	const [svgData, setSvgData] = useState('');
+	const [countdown, setCountdown] = useState(startCountdown);
+	const [characterPositions, setCharacterPositions] = useState(null);
+	
+	const setArrowPosition = n => {
+		if (arrowPosition !== n) {
+			_setArrowPosition(n);
+			const beep = document.getElementById('beep');
+			beep.currentTime = 0;
+			beep.play();
+		}
+	};
+	const setArrowDown = a => {
+		_setArrowDown(a);
+		if (a) {
+			const scillia = document.getElementById('scillia');
+			scillia.currentTime = 0;
+			scillia.play();
+			const boop = document.getElementById('boop');
+			boop.currentTime = 0;
+			boop.play();
+		}
+	};
+	
+	useEffect(() => {
+		const keydown = e => {
+			switch (e.which) {
+			  case 39: {
+					let n = arrowPosition + 1;
+					if (n >= characters.length) {
+					  n %= characters.length;
+					}
+					setArrowPosition(n);
+				  break;
+				}
+				case 37: {
+					let n = arrowPosition - 1;
+					if (n < 0) {
+					  n += characters.length;
+					}
+					setArrowPosition(n);
+					break;
+				}
+				case 13: {
+					setArrowDown(true);
+				  break;
+				}
+			}
+		};
+		window.addEventListener('keydown', keydown);
+		const keyup = e => {
+			switch (e.which) {
+			  case 13: {
+					setArrowDown(false);
+				  break;
+				}
+			}
+		};
+		window.addEventListener('keyup', keyup);
+		return () => {
+			window.removeEventListener('keydown', keydown);
+		  window.removeEventListener('keyup', keyup);
+		};
+  }, [arrowPosition, arrowDown]);
+	useEffect(async () => {
+		const res = await fetch('./arrow.svg');
+		let text = await res.text();
+		setSvgData(text);
+	}, []);
+	useEffect(async () => {
+		const lastTimestamp = Date.now();
+		const interval = setInterval(() => {
+			const now = Date.now();
+			const timeDiff = now - lastTimestamp;
+			let newCountdown = countdown - timeDiff;
+			// console.log('update', countdown, timeDiff, newCountdown);
+			if (newCountdown <= 0) {
+				newCountdown += startCountdown;
+			}
+			/* if (newCountdown > countdown) {
+			  debugger;
+			} */
+			setCountdown(newCountdown);
+		}, 100);
+	  return () => {
+		  clearInterval(interval);
+		};
+	}, []);
+	useEffect(async () => {
+		const onFocus = e => {
+		  const audio = document.getElementById('song');
+			// console.log('play', audio);
+			if (audio.paused) {
+			  audio.play();
+			}
+			// console.log('got audio', audio);
+		};
+		window.addEventListener('mousedown', onFocus);
+		// window.addEventListener('focus', onFocus);
+		window.addEventListener('keydown', onFocus);
+		return () => {
+      window.removeEventListener('mousedown', onFocus);
+      // window.removeEventListener('focus', onFocus);
+      window.removeEventListener('keydown', onFocus);
+		};
+	}, []);
+	
+	const _updateCharacterPositions = () => {
+		const characters = Array.from(ref.current.children);
+		if (characters.length > 0) {
+			const characterPositions = characters.map(c => c.children[0].getBoundingClientRect());
+			setCharacterPositions(characterPositions);
+		} else {
+			setCharacterPositions(null);
+		}
+	};
+	useEffect(_updateCharacterPositions, [ref.current]);
+	useEffect(() => {
+		window.addEventListener('resize', _updateCharacterPositions);
+		return () => {
+		  window.removeEventListener('resize', _updateCharacterPositions);
+		};
+	}, []);
+	
+	// console.log('got button ref', arrowRef);
+	
+	const countdownTime = _formatCountdown(countdown);
 	
 	return (
-    <div className={styles.page}>
-      <Head>
-        <title>Upstreet</title>
-        <meta name="description" content="Generated by create next app" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <div className={styles.container}>
+		  <audio id="beep" style={{
+				position: 'absolute',
+				visibility: 'hidden',
+			}}>
+        <source src="audio/beep.mp3" type="audio/mp3" />
+		  </audio>
+			<audio id="boop" style={{
+				position: 'absolute',
+				visibility: 'hidden',
+			}}>
+        <source src="audio/boop.mp3" type="audio/mp3" />
+		  </audio>
+			<audio id="scillia" style={{
+				position: 'absolute',
+				visibility: 'hidden',
+			}}>
+        <source src="audio/scillia.mp3" type="audio/mp3" />
+		  </audio>
+			<audio autoPlay loop id="song" style={{
+				position: 'absolute',
+				visibility: 'hidden',
+			}}>
+        <source src="audio/song.mp3" type="audio/mp3" />
+		  </audio>
 			
-			<div className={styles.characters}>
-			  
-			</div>
+			<video loop autoPlay muted className={styles.background}>
+			  <source src="videos/city.mp4" type="video/mp4" />
+			</video>
+
+			<div className={styles.inner}>
+				<Head>
+					<title>Upstreet</title>
+					<meta name="description" content="Upstreet drop storm" />
+					<link rel="icon" href="/favicon.ico" />
+				</Head>
+				
+				<header className={styles.header}>
+				  <img src="images/dropstorm-01.svg" className={styles.logo} />
+					<div className={styles.user}>
+					  <img src="images/soul.png" className={styles.icon} />
+						<div className={styles.name}>Geezer</div>
+					</div>
+				</header>
+				
+        {/* <img src="images/dropstorm-01.svg" className={styles.biglogo} /> */}
+				
+				<div className={styles.countdown}>Starts in {countdownTime}</div>
+				
+				<div className={styles.heading}>&gt; Avatar select</div>
+				<div className={styles.characterselect}>
+					<Arrow arrowPosition={arrowPosition} arrowDown={arrowDown} svgData={svgData} characterPositions={characterPositions} />
+					
+					<div className={styles.characters} ref={ref}>
+						{characters.map((character, i) => {
+							return (
+								<div
+								  className={styles.character + ' ' + (arrowPosition === i ? styles.selected : '') + ' ' + ((arrowPosition === i && arrowDown) ? styles.active : '')}
+									onMouseMove={() => {_setArrowPosition(i);}}
+									onMouseDown={e => {
+										setArrowDown(true);
+										setTimeout(() => {
+											setArrowDown(false);
+										}, 200);
+								  }}
+									key={i}
+								>
+								  <div className={styles.inner}>
+										<div className={styles.background}/>
+										<div className={styles['img-wrap']}>
+										  <img src={character.imgSrc} />
+										</div>
+										<div className={styles.wrap}>
+											<div className={styles.name}>{character.name}</div>
+											<div className={styles.class}>The {character.class}</div>
+                    </div>
+                  </div>
+								</div>
+							);
+						})}
+					</div>
+        </div>
+      </div>
     </div>
   )
 }
