@@ -18,6 +18,10 @@
   font-family: 'Rodin';
   src:  url('../public/fonts/FOT-RodinHimawariPro-UB.otf');
 }
+@font-face {
+  font-family: 'Consola';
+  src:  url('../public/fonts/CONSOLA.ttf');
+}
 
 @import url('https://fonts.googleapis.com/css2?family=Exo+2&family=Oswald&family=Roboto&display=swap');
 
@@ -49,11 +53,22 @@
 	flex-direction: column;
 }
 
-.characters {
+.heading,
+.characters
+{
 	display: flex;
 	width: 100%;
 	padding: 0 50px;
 	justify-content: space-between;
+}
+
+.heading {
+	margin-top: 200px;
+	margin-bottom: 30px;
+	padding: 0 100px;
+	background-color: #FFF;
+	font-family: 'Consola';
+  font-size: 50px;
 }
 
 .characters .character {
@@ -232,6 +247,63 @@
 	transform: rotateZ(90deg);
 }
 
+.header {
+	display: flex;
+	width: 100%;
+	height: 100px;
+	background-color: #FFFFFF40;
+	align-items: center;
+}
+
+.header .logo {
+  height: 100px;
+	padding: 10px;
+	margin-right: auto;
+}
+
+.header .user {
+	position: relative;
+	display: flex;
+	height: 100%;
+	align-items: center;
+	background-color: #FFF;
+	cursor: pointer;
+	user-select: none;
+}
+
+.header .user .icon {
+  height: 70px;
+	margin-left: 20px;
+	margin-right: 60px;
+	background-color: #FFF;
+	border-radius: 100px;
+	border: 2px solid #333;
+}
+
+.header .user .name {
+	position: relative;
+	display: flex;
+	height: 80px;
+	padding: 0 10px;
+	padding-top: 30px;
+	margin-bottom: auto;
+	background-color: #000;
+	color: #FFF;
+	align-items: center;
+}
+.header .user .name::before {
+	position: absolute;
+	top: 0;
+	left: -80px;
+  border-width: 0;
+	border-right-width: 80px;
+	border-bottom-width: 80px;
+	border-color: transparent;
+	border-style: solid;
+	border-right-color: #000;
+	content: '';
+}
+
 .biglogo {
   width: 400px;
 	margin: 20px auto;
@@ -241,7 +313,7 @@
 	margin-bottom: 50px;
 	padding: 30px 0;
 	background: #000;
-	font-family: 'Consolas';
+	font-family: 'Consola';
 	font-size: 30px;
 	text-align: center;
   color: #FFF;
