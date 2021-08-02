@@ -128,6 +128,9 @@
 .characters .character.selected {
   filter: brightness(1.3);
 }
+.characters .character.selected .inner {
+  border-color: #FFF;
+}
 .characters .character.selected .name {
   background-color: #333;
 }
