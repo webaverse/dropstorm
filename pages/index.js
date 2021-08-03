@@ -11,6 +11,8 @@ const localColor4 = new THREE.Color();
 const localColor5 = new THREE.Color();
 const localColor6 = new THREE.Color();
 
+console.log('index 1');
+
 const characters = [
 	{
 		name: 'Scillia',
@@ -209,6 +211,8 @@ const _formatCountdown = countdown => {
 };
 const startCountdown = 10 * 60 * 1000;
 export default function Home() {
+	console.log('index 2');
+	
 	const ref = useRef(null);
   const [arrowPosition, _setArrowPosition] = useState(0);
   const [arrowDown, _setArrowDown] = useState(false);
