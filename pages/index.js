@@ -212,26 +212,19 @@ const Arrow = ({
 	  return null;
 	}
 };
-const _setupCanvas = async ({canvas, characterPositions}) => {
-  canvas.width = characterPositions[0].width - 3*2;
-	canvas.height = characterPositions[0].height - 3*2;
-	const renderer = new THREE.WebGLRenderer({
-		canvas,
-		antialias: true,
-		alpha: true,
-	});
-	renderer.setClearColor(0x000000, 0);
-};
-const Character = ({character, i, animation, open, arrowPosition, setArrowDown, setArrowPosition2, characterPositions}) => {
+const Character = ({character, i, animation, open, arrowPosition, setArrowDown, setArrowPosition2, characterPositions, appScriptLoaded}) => {
   const canvasRef = useRef();
 	const [renderer, setRenderer] = useState(null);
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
 		if (canvas) {
+			const width = characterPositions[0].width - 3*2;
+	    const height = characterPositions[0].height - 3*2;
 			_setupCanvas({
 				canvas,
-				characterPositions,
+				width,
+				height,
 			});
 		}
 	}, [canvasRef.current]);
@@ -258,7 +251,7 @@ const Character = ({character, i, animation, open, arrowPosition, setArrowDown, 
 				<div className={styles['img-wrap']}>
 					<img src={character.imgSrc} />
 				</div>
-				{characterPositions ? <canvas className={styles.canvas} ref={canvasRef} /> : null}
+				{(appScriptLoaded && characterPositions) ? <canvas className={styles.canvas} ref={canvasRef} /> : null}
 				<div className={styles.wrap}>
 					<div className={styles.name}>{character.name}</div>
 					<div className={styles.class}>The {character.class}</div>
@@ -286,6 +279,7 @@ export default function Home() {
 	const [svgData, setSvgData] = useState('');
 	const [countdown, setCountdown] = useState(startCountdown);
 	const [characterPositions, setCharacterPositions] = useState(null);
+	const [appScriptLoaded, setAppScriptLoaded] = useState(false);
 	
 	const setArrowPosition = n => {
 		if (!open && arrowPosition !== n) {
@@ -321,7 +315,6 @@ export default function Home() {
 			setOpen(true);
 		}
 	};
-	
 	useEffect(() => {
 		const keydown = e => {
 			if (!open) {
@@ -430,6 +423,15 @@ export default function Home() {
 		  window.removeEventListener('resize', _updateCharacterPositions);
 		};
 	}, []);
+	useEffect(() => {
+	  const script = document.createElement('script');
+		script.type = 'module';
+		script.src = 'dropstorm.js';
+		script.onload = () => {
+		  setAppScriptLoaded(true);
+		};
+		document.body.appendChild(script);
+	}, []);
 	
   /* const _handleContainerMouseMove = e => {
 		setMouse([
@@ -517,6 +519,7 @@ export default function Home() {
 									setArrowDown={setArrowDown}
 									setArrowPosition2={setArrowPosition2}
 									characterPositions={characterPositions}
+									appScriptLoaded={appScriptLoaded}
 									key={i}
 							  />
 							);
