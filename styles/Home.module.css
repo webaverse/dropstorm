@@ -167,6 +167,14 @@
 	border-left-color: #333;
 }
 
+.characters .character .canvas {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
 .characters .wrap {
 	display: flex;
 	flex-direction: column;
