@@ -110,6 +110,9 @@
 	animation-timing-function: step-end;
 	animation-iteration-count: 5;
 }
+/* .characters .character .img-wrap {
+  transition: opacity 0.5s ease-in-out;
+} */
 .characters .background {
 	position: absolute;
 	top: 0;
@@ -120,6 +123,11 @@
 
 .characters .character.selected .img-wrap {
   transform: scale3d(1.1, 1.1, 1.1);
+}
+.characters .character.open .img-wrap {
+  opacity: 0;
+	transform: scale3d(1.1, 1.1, 1.1) translate3d(0, -50px, 0);
+	transition: all 1s cubic-bezier(0, 1, 0, 1);
 }
 
 .characters .img-wrap {
