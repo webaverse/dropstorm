@@ -212,8 +212,31 @@ const Arrow = ({
 	  return null;
 	}
 };
-const Character = ({character, i, animation, open, arrowPosition, setArrowDown, setArrowPosition2}) => {
-  return (
+const _setupCanvas = async ({canvas, characterPositions}) => {
+  canvas.width = characterPositions[0].width - 3*2;
+	canvas.height = characterPositions[0].height - 3*2;
+	const renderer = new THREE.WebGLRenderer({
+		canvas,
+		antialias: true,
+		alpha: true,
+	});
+	renderer.setClearColor(0x000000, 0);
+};
+const Character = ({character, i, animation, open, arrowPosition, setArrowDown, setArrowPosition2, characterPositions}) => {
+  const canvasRef = useRef();
+	const [renderer, setRenderer] = useState(null);
+
+	useEffect(() => {
+		const canvas = canvasRef.current;
+		if (canvas) {
+			_setupCanvas({
+				canvas,
+				characterPositions,
+			});
+		}
+	}, [canvasRef.current]);
+	
+	return (
 		<div
 			className={
 				styles.character + ' ' +
@@ -235,6 +258,7 @@ const Character = ({character, i, animation, open, arrowPosition, setArrowDown, 
 				<div className={styles['img-wrap']}>
 					<img src={character.imgSrc} />
 				</div>
+				{characterPositions ? <canvas className={styles.canvas} ref={canvasRef} /> : null}
 				<div className={styles.wrap}>
 					<div className={styles.name}>{character.name}</div>
 					<div className={styles.class}>The {character.class}</div>
@@ -492,6 +516,7 @@ export default function Home() {
 									arrowPosition={arrowPosition}
 									setArrowDown={setArrowDown}
 									setArrowPosition2={setArrowPosition2}
+									characterPositions={characterPositions}
 									key={i}
 							  />
 							);
