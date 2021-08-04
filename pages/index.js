@@ -204,7 +204,7 @@ const Arrow = ({
 				}}
 				// ref={ref}
 			>
-			  <div className={styles.perspective} onAnimationEnd={() => {setAnimation(null);}} dangerouslySetInnerHTML={{__html: svgDataBaked}}></div>
+			  <div className={styles.perspective} onAnimationEnd={() => {setAnimation(false);}} dangerouslySetInnerHTML={{__html: svgDataBaked}}></div>
 			</div>
 		);
   } else {
@@ -224,7 +224,7 @@ export default function Home() {
 	const ref = useRef(null);
   const [arrowPosition, _setArrowPosition] = useState(0);
   const [arrowDown, _setArrowDown] = useState(false);
-  const [animation, setAnimation] = useState(null);
+  const [animation, setAnimation] = useState(false);
   // const [mouse, setMouse] = useState([0, 0]);
 	const [svgData, setSvgData] = useState('');
 	const [countdown, setCountdown] = useState(startCountdown);
@@ -236,6 +236,8 @@ export default function Home() {
 			const beep = document.getElementById('beep');
 			beep.currentTime = 0;
 			beep.play();
+			
+			setAnimation(false);
 		}
 	};
 	const setArrowDown = a => {
@@ -247,12 +249,7 @@ export default function Home() {
 			const boop = document.getElementById('boop');
 			boop.currentTime = 0;
 			boop.play();
-			
-			const now = Date.now();
-			setAnimation({
-			  startTime: now,
-			  endTime: now + 2000,
-			});
+			setAnimation(true);
 		}
 	};
 	
