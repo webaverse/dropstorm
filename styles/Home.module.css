@@ -238,15 +238,40 @@
   transform: scale3d(0.9, 0.9, 0.9);
 }
 
+@keyframes arrow-animation {
+	0% {
+		transform: translate3d(0, 0, 0);
+  }
+	50% {
+		transform: translate3d(200px, 200px, 300px) rotateZ(-90deg);
+		opacity: 1;
+	}
+	100% {
+		transform: translate3d(200px, 200px, -500px) rotateZ(-90deg) rotateY(90deg);
+		/* opacity: 0; */
+	}
+}
+
 .arrow {
-  position: absolute;
+	position: absolute;
 	transform: translate3d(0,0,0);
 	transition: all 0.1s cubic-bezier(0, 1, 0, 1);
+  perspective: 1000px;
+	perspective-origin: calc(300px - 32px) calc(300px - 32px);
 	pointer-events: none;
 	z-index: 2;
 }
 
-.arrow > svg {
+.arrow .perspective {
+  transform: translate3d(0, 0, 0);
+}
+.arrow.animate .perspective {
+  animation-name: arrow-animation;
+  animation-duration: 1s;
+	animation-timing-function: cubic-bezier(0, 1, 0, 1);
+}
+
+.arrow .perspective svg {
   width: 128px;
   height: 128px;
 	transform: rotateZ(90deg);
