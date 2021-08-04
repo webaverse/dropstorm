@@ -267,11 +267,11 @@
 		transform: translate3d(0, 0, 0);
   }
 	50% {
-		transform: translate3d(200px, 200px, 300px) rotateZ(-90deg);
+		transform: translate3d(100px, 100px, 300px) rotateZ(-90deg);
 		opacity: 1;
 	}
 	100% {
-		transform: translate3d(200px, 200px, -500px) rotateZ(-90deg) rotateY(90deg);
+		transform: translate3d(100px, 100px, -500px) rotateZ(-90deg) rotateY(90deg);
 	}
 }
 
@@ -280,7 +280,7 @@
 	transform: translate3d(0,0,0);
 	transition: all 0.1s cubic-bezier(0, 1, 0, 1);
   perspective: 1000px;
-	perspective-origin: calc(300px - 32px) calc(300px - 32px);
+	perspective-origin: calc(200px - 32px) calc(200px - 32px);
 	pointer-events: none;
 	z-index: 2;
 }
