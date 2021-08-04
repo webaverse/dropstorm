@@ -107,7 +107,14 @@ const colors = [
     0xb5ffef,
   // ],
 ];
-const Arrow = ({arrowPosition, arrowDown, svgData, characterPositions}) => {
+const Arrow = ({
+	arrowPosition,
+	arrowDown,
+	animation,
+	setAnimation,
+	svgData,
+	characterPositions,
+}) => {
 	// const ref = useRef(null);
 	const [svgDataBaked, setSvgDataBaked] = useState('');
 
@@ -188,15 +195,16 @@ const Arrow = ({arrowPosition, arrowDown, svgData, characterPositions}) => {
   if (characterPositions) {
 		return (
 			<div
-				className={styles.arrow}
+				className={styles.arrow + ' ' + (animation ? styles.animate : '')}
 				style={{
 					marginTop: '-30px',
+					// marginLeft: '-100px',
 					left: `${characterPositions[arrowPosition].x - 64}px`,
-					transform: arrowDown ? `scale(0.8)` : null,
+					// transform: arrowDown ? `scale(0.8)` : null,
 				}}
-				dangerouslySetInnerHTML={{__html: svgDataBaked}}
 				// ref={ref}
 			>
+			  <div className={styles.perspective} onAnimationEnd={() => {setAnimation(null);}} dangerouslySetInnerHTML={{__html: svgDataBaked}}></div>
 			</div>
 		);
   } else {
@@ -216,6 +224,7 @@ export default function Home() {
 	const ref = useRef(null);
   const [arrowPosition, _setArrowPosition] = useState(0);
   const [arrowDown, _setArrowDown] = useState(false);
+  const [animation, setAnimation] = useState(null);
   // const [mouse, setMouse] = useState([0, 0]);
 	const [svgData, setSvgData] = useState('');
 	const [countdown, setCountdown] = useState(startCountdown);
@@ -238,6 +247,12 @@ export default function Home() {
 			const boop = document.getElementById('boop');
 			boop.currentTime = 0;
 			boop.play();
+			
+			const now = Date.now();
+			setAnimation({
+			  startTime: now,
+			  endTime: now + 2000,
+			});
 		}
 	};
 	
@@ -405,7 +420,14 @@ export default function Home() {
 				
 				<div className={styles.heading}>&gt; Avatar select</div>
 				<div className={styles.characterselect}>
-					<Arrow arrowPosition={arrowPosition} arrowDown={arrowDown} svgData={svgData} characterPositions={characterPositions} />
+					<Arrow
+					  arrowPosition={arrowPosition}
+						arrowDown={arrowDown}
+						animation={animation}
+						setAnimation={setAnimation}
+						svgData={svgData}
+						characterPositions={characterPositions}
+				  />
 					
 					<div className={styles.characters} ref={ref}>
 						{characters.map((character, i) => {
