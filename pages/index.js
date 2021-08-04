@@ -1,15 +1,15 @@
 import {useState, useEffect, useRef} from 'react';
 import Head from 'next/head'
-import * as THREE from '../three.module.js';
+import {Color} from '../Color.js';
 // import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
-const localColor = new THREE.Color();
-const localColor2 = new THREE.Color();
-const localColor3 = new THREE.Color();
-const localColor4 = new THREE.Color();
-const localColor5 = new THREE.Color();
-const localColor6 = new THREE.Color();
+const localColor = new Color();
+const localColor2 = new Color();
+const localColor3 = new Color();
+const localColor4 = new Color();
+const localColor5 = new Color();
+const localColor6 = new Color();
 
 // console.log('index 1');
 
