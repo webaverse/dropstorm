@@ -255,6 +255,14 @@ export default function Home() {
 			const boop = document.getElementById('boop');
 			boop.currentTime = 0;
 			boop.play();
+			/* if (animation) {
+			  setAnimation(false);
+			  setTimeout(() => {
+				  setAnimation(true);
+				});
+			} else {
+			  setAnimation(true);
+			} */
 			setAnimation(true);
 		}
 	};
