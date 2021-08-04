@@ -85,14 +85,30 @@
 	width: 100%;
 	flex-direction: column;
 	flex: 1;
-	border: 3px solid #333;
 	background-image: radial-gradient(#7986cb, #3949ab);
+	border: 3px solid #333;
 }
 .characters .character {
   padding: 0 2%;
 }
-.characters .character:not(.selected) {
-  
+@keyframes character-animation {
+	0% {
+		background-image: none;
+		background-color: #3949ab;
+  }
+	50% {
+		background-color: #FFFFFF;
+	}
+	100% {
+		background-image: none;
+		background-color: #3949ab;
+	}
+}
+.characters .character.animate .inner {
+  animation-name: character-animation;
+  animation-duration: 0.03s;
+	animation-timing-function: step-end;
+	animation-iteration-count: 5;
 }
 .characters .background {
 	position: absolute;
