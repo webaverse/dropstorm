@@ -112,6 +112,7 @@ const Arrow = ({
 	arrowDown,
 	animation,
 	setAnimation,
+	setOpen,
 	svgData,
 	characterPositions,
 }) => {
@@ -204,7 +205,7 @@ const Arrow = ({
 				}}
 				// ref={ref}
 			>
-			  <div className={styles.perspective} onAnimationEnd={() => {setAnimation(false);}} dangerouslySetInnerHTML={{__html: svgDataBaked}}></div>
+			  <div className={styles.perspective} onAnimationEnd={() => {setAnimation(false); setOpen(false);}} dangerouslySetInnerHTML={{__html: svgDataBaked}}></div>
 			</div>
 		);
   } else {
@@ -225,6 +226,7 @@ export default function Home() {
   const [arrowPosition, _setArrowPosition] = useState(0);
   const [arrowDown, _setArrowDown] = useState(false);
   const [animation, setAnimation] = useState(false);
+  const [open, setOpen] = useState(false);
   // const [mouse, setMouse] = useState([0, 0]);
 	const [svgData, setSvgData] = useState('');
 	const [countdown, setCountdown] = useState(startCountdown);
@@ -238,12 +240,14 @@ export default function Home() {
 			beep.play();
 			
 			setAnimation(false);
+			setOpen(false);
 		}
 	};
 	const setArrowPosition2 = n => {
 		if (arrowPosition !== n) {
 			_setArrowPosition(n);
 			setAnimation(false);
+			setOpen(false);
 		}
 	};
 	const setArrowDown = a => {
@@ -264,6 +268,7 @@ export default function Home() {
 			  setAnimation(true);
 			} */
 			setAnimation(true);
+			setOpen(true);
 		}
 	};
 	
@@ -436,6 +441,7 @@ export default function Home() {
 						arrowDown={arrowDown}
 						animation={animation}
 						setAnimation={setAnimation}
+						setOpen={setOpen}
 						svgData={svgData}
 						characterPositions={characterPositions}
 				  />
@@ -444,7 +450,12 @@ export default function Home() {
 						{characters.map((character, i) => {
 							return (
 								<div
-								  className={styles.character + ' ' + (arrowPosition === i ? styles.selected : '') + ' ' + ((arrowPosition === i && animation) ? styles.animate : '')}
+								  className={
+										styles.character + ' ' +
+										(arrowPosition === i ? styles.selected : '') + ' ' +
+										((arrowPosition === i && animation) ? styles.animate : '') + ' ' +
+										((arrowPosition === i && open) ? styles.open : '')
+									}
 									onMouseMove={() => {setArrowPosition2(i);}}
 									onMouseDown={e => {
 										setArrowDown(true);
