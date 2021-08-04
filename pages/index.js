@@ -221,7 +221,7 @@ const Character = ({character, i, animation, open, arrowPosition, setArrowDown, 
 		if (canvas) {
 			const width = characterPositions[0].width - 3*2;
 	    const height = characterPositions[0].height - 3*2;
-			_setupCanvas({
+			setupAppCanvas({
 				canvas,
 				width,
 				height,
