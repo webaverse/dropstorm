@@ -27,7 +27,7 @@ const characters = [
 	{
 		name: 'Hyacinth',
 		imgSrc: 'characters/hyacinth.png',
-		class: 'Beast Influencer',
+		class: 'Beast Painter',
 	},
 	{
 		name: 'Juniper',
