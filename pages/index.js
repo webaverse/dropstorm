@@ -205,7 +205,7 @@ const Arrow = ({
 				}}
 				// ref={ref}
 			>
-			  <div className={styles.perspective} onAnimationEnd={() => {setAnimation(false); setOpen(false);}} dangerouslySetInnerHTML={{__html: svgDataBaked}}></div>
+			  <div className={styles.perspective} dangerouslySetInnerHTML={{__html: svgDataBaked}}></div>
 			</div>
 		);
   } else {
@@ -233,26 +233,21 @@ export default function Home() {
 	const [characterPositions, setCharacterPositions] = useState(null);
 	
 	const setArrowPosition = n => {
-		if (arrowPosition !== n) {
+		if (!open && arrowPosition !== n) {
 			_setArrowPosition(n);
 			const beep = document.getElementById('beep');
 			beep.currentTime = 0;
 			beep.play();
-			
-			setAnimation(false);
-			setOpen(false);
 		}
 	};
 	const setArrowPosition2 = n => {
-		if (arrowPosition !== n) {
+		if (!open && arrowPosition !== n) {
 			_setArrowPosition(n);
-			setAnimation(false);
-			setOpen(false);
 		}
 	};
 	const setArrowDown = a => {
 		_setArrowDown(a);
-		if (a) {
+		if (!open && a) {
 			const scillia = document.getElementById('scillia');
 			scillia.currentTime = 0;
 			scillia.play();
@@ -274,26 +269,35 @@ export default function Home() {
 	
 	useEffect(() => {
 		const keydown = e => {
-			switch (e.which) {
-			  case 39: {
-					let n = arrowPosition + 1;
-					if (n >= characters.length) {
-					  n %= characters.length;
+			if (!open) {
+				switch (e.which) {
+					case 39: { // right
+						let n = arrowPosition + 1;
+						if (n >= characters.length) {
+							n %= characters.length;
+						}
+						setArrowPosition(n);
+						break;
 					}
-					setArrowPosition(n);
-				  break;
-				}
-				case 37: {
-					let n = arrowPosition - 1;
-					if (n < 0) {
-					  n += characters.length;
+					case 37: { // left
+						let n = arrowPosition - 1;
+						if (n < 0) {
+							n += characters.length;
+						}
+						setArrowPosition(n);
+						break;
 					}
-					setArrowPosition(n);
-					break;
+					case 13: { // enter
+						setArrowDown(true);
+						break;
+					}
 				}
-				case 13: {
-					setArrowDown(true);
-				  break;
+		  } else {
+				switch (e.which) {
+					case 27: { // escape
+					  setAnimation(false);
+					  setOpen(false);
+					}
 				}
 			}
 		};
@@ -311,7 +315,7 @@ export default function Home() {
 			window.removeEventListener('keydown', keydown);
 		  window.removeEventListener('keyup', keyup);
 		};
-  }, [arrowPosition, arrowDown]);
+  }, [arrowPosition, arrowDown, animation, open]);
 	useEffect(async () => {
 		const res = await fetch('./arrow.svg');
 		let text = await res.text();
