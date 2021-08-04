@@ -433,7 +433,7 @@ export default function Home() {
 						{characters.map((character, i) => {
 							return (
 								<div
-								  className={styles.character + ' ' + (arrowPosition === i ? styles.selected : '') + ' ' + ((arrowPosition === i && arrowDown) ? styles.active : '')}
+								  className={styles.character + ' ' + (arrowPosition === i ? styles.selected : '') + ' ' + ((arrowPosition === i && animation) ? styles.animate : '')}
 									onMouseMove={() => {_setArrowPosition(i);}}
 									onMouseDown={e => {
 										setArrowDown(true);
