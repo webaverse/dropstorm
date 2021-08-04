@@ -272,7 +272,6 @@
 	}
 	100% {
 		transform: translate3d(200px, 200px, -500px) rotateZ(-90deg) rotateY(90deg);
-		/* opacity: 0; */
 	}
 }
 
@@ -293,6 +292,7 @@
   animation-name: arrow-animation;
   animation-duration: 1s;
 	animation-timing-function: cubic-bezier(0, 1, 0, 1);
+	animation-fill-mode: forwards;
 }
 
 .arrow .perspective svg {
