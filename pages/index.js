@@ -212,6 +212,37 @@ const Arrow = ({
 	  return null;
 	}
 };
+const Character = ({character, i, animation, open, arrowPosition, setArrowDown, setArrowPosition2}) => {
+  return (
+		<div
+			className={
+				styles.character + ' ' +
+				(arrowPosition === i ? styles.selected : '') + ' ' +
+				((arrowPosition === i && animation) ? styles.animate : '') + ' ' +
+				((arrowPosition === i && open) ? styles.open : '')
+			}
+			onMouseMove={() => {setArrowPosition2(i);}}
+			onMouseDown={e => {
+				setArrowDown(true);
+				setTimeout(() => {
+					setArrowDown(false);
+				}, 200);
+			}}
+			key={i}
+		>
+			<div className={styles.inner}>
+				<div className={styles.background}/>
+				<div className={styles['img-wrap']}>
+					<img src={character.imgSrc} />
+				</div>
+				<div className={styles.wrap}>
+					<div className={styles.name}>{character.name}</div>
+					<div className={styles.class}>The {character.class}</div>
+				</div>
+			</div>
+		</div>
+	);
+};
 const _formatCountdown = countdown => {
 	let seconds = Math.floor(countdown/1000);
 	const minutes = Math.floor(seconds/60);
@@ -453,33 +484,16 @@ export default function Home() {
 					<div className={styles.characters} ref={ref}>
 						{characters.map((character, i) => {
 							return (
-								<div
-								  className={
-										styles.character + ' ' +
-										(arrowPosition === i ? styles.selected : '') + ' ' +
-										((arrowPosition === i && animation) ? styles.animate : '') + ' ' +
-										((arrowPosition === i && open) ? styles.open : '')
-									}
-									onMouseMove={() => {setArrowPosition2(i);}}
-									onMouseDown={e => {
-										setArrowDown(true);
-										setTimeout(() => {
-											setArrowDown(false);
-										}, 200);
-								  }}
+  							<Character
+								  character={character}
+									i={i}
+								  animation={animation}
+									open={open}
+									arrowPosition={arrowPosition}
+									setArrowDown={setArrowDown}
+									setArrowPosition2={setArrowPosition2}
 									key={i}
-								>
-								  <div className={styles.inner}>
-										<div className={styles.background}/>
-										<div className={styles['img-wrap']}>
-										  <img src={character.imgSrc} />
-										</div>
-										<div className={styles.wrap}>
-											<div className={styles.name}>{character.name}</div>
-											<div className={styles.class}>The {character.class}</div>
-                    </div>
-                  </div>
-								</div>
+							  />
 							);
 						})}
 					</div>
