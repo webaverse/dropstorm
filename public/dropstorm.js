@@ -2,7 +2,7 @@ import * as THREE from 'https://lib.webaverse.com/three.js';
 import {GLTFLoader} from 'https://lib.webaverse.com/three.js';
 import {BufferGeometryUtils} from 'https://lib.webaverse.com/three.js';
 
-globalThis._setupCanvas = async ({canvas, width, height}) => {
+globalThis.setupAppCanvas = async ({canvas, width, height}) => {
   canvas.width = width;
 	canvas.height = height;
 	
