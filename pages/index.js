@@ -240,6 +240,12 @@ export default function Home() {
 			setAnimation(false);
 		}
 	};
+	const setArrowPosition2 = n => {
+		if (arrowPosition !== n) {
+			_setArrowPosition(n);
+			setAnimation(false);
+		}
+	};
 	const setArrowDown = a => {
 		_setArrowDown(a);
 		if (a) {
@@ -431,7 +437,7 @@ export default function Home() {
 							return (
 								<div
 								  className={styles.character + ' ' + (arrowPosition === i ? styles.selected : '') + ' ' + ((arrowPosition === i && animation) ? styles.animate : '')}
-									onMouseMove={() => {_setArrowPosition(i);}}
+									onMouseMove={() => {setArrowPosition2(i);}}
 									onMouseDown={e => {
 										setArrowDown(true);
 										setTimeout(() => {
